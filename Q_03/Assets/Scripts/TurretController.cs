@@ -17,12 +17,32 @@ public class TurretController : MonoBehaviour
         Init();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) {
+
         if (other.CompareTag("Player"))
         {
+            other.transform.parent.GetComponent<PlayerController>().DeadEvent += StopShoot;
             Fire(other.transform);
         }
+    }
+
+    //수정5 (추가)
+    void StopShoot() {
+
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
+
+    }
+
+    //수정2 (추가)
+    private void OnTriggerExit(Collider other) {
+
+        if (other.CompareTag("Player") && _coroutine != null) {
+            other.transform.parent.GetComponent<PlayerController>().DeadEvent -= StopShoot;
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+
     }
 
     private void Init()
@@ -55,4 +75,5 @@ public class TurretController : MonoBehaviour
     {
         _coroutine = StartCoroutine(FireRoutine(target));
     }
+
 }
