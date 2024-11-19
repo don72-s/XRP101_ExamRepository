@@ -15,7 +15,9 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void Pause()
     {
-        Time.timeScale = 0f;
+        //수정2 (제거, 작성)
+        //Time.timeScale = 0f;
+        Score = 0;
     }
 
     public void LoadScene(int buildIndex)
