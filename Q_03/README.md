@@ -22,42 +22,42 @@
 
 ## 답안
 
-1. 플레이어 인식 실패
-   터렛에 존재하는 ontriggerenter함수는 한쪽이라도 rigidbody가 존재해야 트리거 가능.
-   양쪽 오브젝트 모두 rigidbody가 없어서 인식이 안되는 현상으로 확인됨.
+1. 플레이어 인식 실패<br>
+   터렛에 존재하는 ontriggerenter함수는 한쪽이라도 rigidbody가 존재해야 트리거 가능.<br>
+   양쪽 오브젝트 모두 rigidbody가 없어서 인식이 안되는 현상으로 확인됨.<br>
 
-- player > body에 Rigidbody 컴포넌트를 추가하고 isgravity를 비활성화한 뒤, 프리팹에 오버라이드하여 해결
+- player > body에 Rigidbody 컴포넌트를 추가하고 isgravity를 비활성화한 뒤, 프리팹에 오버라이드하여 해결<br>
 
-2. 총알 생성 실패
-   bulletcontroller의 Init에서 getcomponent로 존재하지 않는 rigidbody를 가져오지 못해서 오류 발생
+2. 총알 생성 실패<br>
+   bulletcontroller의 Init에서 getcomponent로 존재하지 않는 rigidbody를 가져오지 못해서 오류 발생<br>
 
-- bullet 프리팹에 rigidbody 컴포넌트를 추가하여 해결
+- bullet 프리팹에 rigidbody 컴포넌트를 추가하여 해결<br>
 
-3. 데미지 함수 호출 실패
-   충돌체와 rigidbody는 body에 있는데, playerController컴포넌트는 부모 오브젝트인 player에 있어서
-   해당 컴포넌트를 가져올 수 없어서 nullexception 발생.
+3. 데미지 함수 호출 실패<br>
+   충돌체와 rigidbody는 body에 있는데, playerController컴포넌트는 부모 오브젝트인 player에 있어서<br>
+   해당 컴포넌트를 가져올 수 없어서 nullexception 발생.<br>
 
-- 충돌한 대상이 아니라 parent오브젝트로부터 getcomponent를 호출하도록 수정하여 해걸.
+- 충돌한 대상이 아니라 parent오브젝트로부터 getcomponent를 호출하도록 수정하여 해결.<br>
 
-4. 총알 발사 주기 문제
-   한번 플레이어를 인식한 뒤에는 범위에서 벗어나도 계속해서 총알을 발사하게 된다.
+4. 총알 발사 주기 문제<br>
+   한번 플레이어를 인식한 뒤에는 범위에서 벗어나도 계속해서 총알을 발사하게 된다.<br>
 
-- ontriggerexit를 작성해 코루틴을 중지시켜서 해결
+- ontriggerexit를 작성해 코루틴을 중지시켜서 해결<br>
 
-5. 총알 발사 각도, 속도 일관성 문제
-   총알이 재발사될 때, 이전에 받았던 힘이 유지되어 총알을 재사용할 때 속도가 일정하지 않은 문제 발생.
+5. 총알 발사 각도, 속도 일관성 문제<br>
+   총알이 재발사될 때, 이전에 받았던 힘이 유지되어 총알을 재사용할 때 속도가 일정하지 않은 문제 발생.<br>
 
-- fire할 경우에 velocity를 0으로 바꿔주고 시작하여 문제 해결
+- fire할 경우에 velocity를 0으로 바꿔주고 시작하여 문제 해결<br>
 
-6. 소리가 재생되지 않는 문제 + 여러번 죽는 문제.
-   죽자마자 비활성화되어 오디오소스가 소리를 출력하지 않는 문제를 확인.
-   타이밍에 따라 die함수가 여러번 호출되는 문제 확인.
+6. 소리가 재생되지 않는 문제 + 여러번 죽는 문제.<br>
+   죽자마자 비활성화되어 오디오소스가 소리를 출력하지 않는 문제를 확인.<br>
+   타이밍에 따라 die함수가 여러번 호출되는 문제 확인.<br>
   
-- 오디오가 재생중인 경우에는 die함수에서 바로 리턴하도록 하여 중복사망 문제를 해결.
-- 별도 코루틴을 두어, audioclip의 길이만큼 대기 후 오브젝트를 제거하도록 개선하여 문제 해결
+- 오디오가 재생중인 경우에는 die함수에서 바로 리턴하도록 하여 중복사망 문제를 해결.<br>
+- 별도 코루틴을 두어, audioclip의 길이만큼 대기 후 오브젝트를 제거하도록 개선하여 문제 해결<br>
 
-7. 플레이어가 죽어도 계속 포탑이 발사하는 경우
-   setactivefalse의 경우, ontriggerexit등을 판단하지 못하여 발생한 오류.
+7. 플레이어가 죽어도 계속 포탑이 발사하는 경우<br>
+   setactivefalse의 경우, ontriggerexit등을 판단하지 못하여 발생한 오류.<br>
 
 - enter때 해당 플레이어에게 이벤트를 등록, exit때 해제하도록 하고, 죽었을 경우 이벤트를 실행, 모든 이벤트 해제하는
   로직을 작성하여 구성.
