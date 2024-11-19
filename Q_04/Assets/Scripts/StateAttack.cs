@@ -32,7 +32,8 @@ public class StateAttack : PlayerState
 
     public override void Exit()
     {
-        Machine.ChangeState(StateType.Idle);
+        //수정2 (제거)
+        //Machine.ChangeState(StateType.Idle);
     }
 
     private void Attack()
@@ -46,6 +47,9 @@ public class StateAttack : PlayerState
         foreach (Collider col in cols)
         {
             damagable = col.GetComponent<IDamagable>();
+            //수정1 (추가)
+            if (damagable == null)
+                continue;
             damagable.TakeHit(Controller.AttackValue);
         }
     }
@@ -55,7 +59,10 @@ public class StateAttack : PlayerState
         yield return _wait;
 
         Attack();
-        Exit();
+
+        //수정2 (제거, 이동)
+        //Exit();
+        Machine.ChangeState(StateType.Idle);
     }
 
 }
